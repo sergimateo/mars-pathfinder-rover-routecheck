@@ -1,19 +1,218 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div id="bg">
+      <img src="./assets/1341_pathfinder20160226-16.png" alt="" />
+    </div>
+    <img
+      alt="Pathfinder logo"
+      src="./assets/Mars_Pathfinder_Insignia_large.png"
+      height="100px"
+    />
+    <div class="my-2">
+      <h1>Sojourner Route Validation Test</h1>
+    </div>
+
+    <div class="d-flex flex-column my-2">
+      <h2 class="text-center">Set Squared Grid Size</h2>
+      <div class="d-flex col-2 mx-auto my-2">
+        <b-form-input
+          type="number"
+          id="gridSize"
+          min="0"
+          step="1"
+          class="form-control"
+          v-model.number="gridSize"
+        >
+        </b-form-input>
+      </div>
+    </div>
+    <div class="d-flex flex-column my-2">
+      <h2 class="text-center">Initial Values</h2>
+      <div class="d-flex justify-content-center">
+        <div class="form-group param mx-1">
+          <label for="xVal">X Value</label>
+          <b-form-input
+            type="number"
+            id="xVal"
+            min="0"
+            step="1"
+            class="form-control"
+            v-model.number="initVals.xVal"
+          >
+          </b-form-input>
+        </div>
+        <div class="mx-1">:</div>
+        <div class="form-group param mx-1">
+          <label for="yVal">Y Value</label>
+          <input
+            id="yVal"
+            type="number"
+            min="0"
+            step="1"
+            class="form-control"
+            v-model.number="initVals.yVal"
+          />
+        </div>
+        <div class="form-group mx-3">
+          <label for="orientation">Orientation</label>
+          <select
+            name="orientation"
+            id="orientation"
+            class="form-control"
+            v-model="initVals.orientation"
+          >
+            <option value="N">N</option>
+            <option value="E">E</option>
+            <option value="S">S</option>
+            <option value="W">W</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex flex-column my-2">
+      <h2 class="text-center">Instructions Sequence</h2>
+      <b-form-input
+        class="mx-auto col-6"
+        id="instructionsText"
+        v-model="instructionsText"
+        disabled
+      ></b-form-input>
+
+      <div class="d-flex justify-content-around flex-wrap mt-3 mx-auto">
+        <b-button variant="info" class="mt-2 mx-2" @click="addInstruction('L')">
+          Turn left
+        </b-button>
+        <b-button variant="info" class="mt-2 mx-2" @click="addInstruction('A')">
+          Advance
+        </b-button>
+        <b-button variant="info" class="mt-2 mx-2" @click="addInstruction('R')">
+          Turn right
+        </b-button>
+        <b-button
+          variant="danger"
+          class="mt-2 mx-2"
+          @click="deleteInstructions"
+        >
+          Delete all
+        </b-button>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center my-2">
+      <b-button variant="success" class="mb-3" @click="runInstructions">
+        Run test
+      </b-button>
+    </div>
+    <div>
+      <div v-if="routevalid">Route Valid. End position {{ currentVals }}</div>
+      <div v-if="routeinvalid">
+        Route Invalid at instruction {{ this.instructionPointer }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  data() {
+    return {
+      text: "",
+      compass: ["N", "E", "S", "W"],
+      gridSize: 0,
+
+      initVals: {
+        xVal: 0,
+        yVal: 0,
+        orientation: "N",
+      },
+      currentVals: {},
+
+      instructionsText: "",
+      instructionsArray: [],
+      instructionPointer: 0,
+      routeinvalid: 0,
+      routevalid: 0,
+    };
+  },
+  components: {},
+  methods: {
+    addInstruction(instruction) {
+      this.instructionsText += instruction;
+      this.instructionsArray.push(instruction);
+    },
+    deleteInstructions() {
+      this.instructionsText = "";
+      this.instructionsArray = [];
+    },
+    runInstructions() {
+      // window.alert(
+      //   "Grid Size: " +
+      //     this.gridSize +
+      //     ". Initial Values: " +
+      //     this.initVals.xVal +
+      //     " " +
+      //     this.initVals.yVal +
+      //     " " +
+      //     this.initVals.orientation +
+      //     ". Run Instruction Set: " +
+      //     this.instructionsText +
+      //     this.instructionsArray
+      // );
+      this.instructionPointer = 0;
+      this.routeinvalid = 0;
+      this.routevalid = 0;
+      this.currentVals = this.initVals;
+      this.routeValidation();
+    },
+    routeValidation() {
+      if (this.isInsideGrid()) {
+        let maxCount = this.instructionsArray.length;
+        let i = this.instructionPointer;
+        // console.log(maxCount);
+
+        if (i < maxCount) {
+          this.updateCurrentVals(i);
+          this.instructionPointer++;
+          console.log("number of instructions" + this.instructionPointer);
+          this.routeValidation();
+        } else {
+          //  after running last instruction
+          //  check isInsidegrid
+          if (this.isInsideGrid()) {
+            this.routeinvalid = 0;
+            this.routevalid = 1;
+          } else {
+            this.routevalid = 0;
+            this.routeinvalid = 1;
+          }
+          //           if true
+          //
+          // else
+          //           this.routevalid = 0;
+          //           this.routeinvalid = 1;
+        }
+      } else {
+        this.routevalid = 0;
+        this.routeinvalid = 1;
+      }
+
+      // window.alert("Route Validating");
+    },
+
+    isInsideGrid() {
+      let insideX = this.gridSize - this.initVals.xVal;
+      let insideY = this.gridSize - this.initVals.yVal;
+      if (this.initVals.xVal > -1 && insideX > -1 && insideY > -1) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    // updateCurrentVals(i) {
+    // let currentInstruction = this.instructionsArray[i];
+    // },
+  },
+};
 </script>
 
 <style>
@@ -22,7 +221,25 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: whitesmoke;
+  margin-top: 10px;
+}
+#bg {
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: -1;
+}
+#bg img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  min-width: 50%;
+  min-height: 50%;
 }
 </style>
