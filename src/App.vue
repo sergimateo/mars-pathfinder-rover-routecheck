@@ -8,27 +8,29 @@
       src="./assets/Mars_Pathfinder_Insignia_large.png"
       height="100px"
     />
-    <div class="my-3">
-      <h1>Sojourner Route Validation Test</h1>
-    </div>
-    <div v-if="showTest">
-      <div class="d-flex flex-column my-2">
-        <h2 class="text-center">Set Squared Grid Size</h2>
-        <div class="d-flex col-2 mx-auto my-2">
-          <b-form-input
-            type="number"
-            id="gridSize"
-            min="0"
-            step="1"
-            class="form-control"
-            v-model.number="gridSize"
-          >
-          </b-form-input>
-        </div>
+    <div id="block" class="d-flex flex-column my-2">
+      <div id="title" class="d-flex flex-column">
+        <h1>Sojourner Route Validation Test</h1>
       </div>
-      <div class="d-flex flex-column my-2">
-        <h2 class="text-center">Initial Values</h2>
-        <div class="d-flex justify-content-center">
+      <div v-if="showTest" class="d-flex flex-column my-2">
+        <div id="initial text" class="d-flex flex-column my-3">
+          <h2 class="text-center">Initial Values</h2>
+        </div>
+        <div id="gridsize" class="d-flex flex-column my-2">
+          <h4 class="text-center">Set Squared Grid Size</h4>
+          <div class="d-flex col-2 mx-auto my-2">
+            <b-form-input
+              type="number"
+              id="gridSize"
+              min="0"
+              step="1"
+              class="form-control"
+              v-model.number="gridSize"
+            >
+            </b-form-input>
+          </div>
+        </div>
+        <div id="xposypos" class="d-flex justify-content-center">
           <div class="form-group param mx-1">
             <label for="xVal">X Value</label>
             <b-form-input
@@ -68,47 +70,49 @@
             </select>
           </div>
         </div>
-      </div>
-      <div class="d-flex flex-column my-2">
-        <h2 class="text-center">Instructions Sequence</h2>
-        <b-form-input
-          class="mx-auto col-6"
-          id="instructionsText"
-          v-model="instructionsText"
-          disabled
-        ></b-form-input>
-      </div>
-      <div>
-        <div class="d-flex justify-content-around flex-wrap mt-3 mx-auto">
-          <b-button
-            variant="info"
-            class="mt-2 mx-2"
-            @click="addInstruction('L')"
-          >
-            Turn left
-          </b-button>
-          <b-button
-            variant="info"
-            class="mt-2 mx-2"
-            @click="addInstruction('A')"
-          >
-            Advance
-          </b-button>
-          <b-button
-            variant="info"
-            class="mt-2 mx-2"
-            @click="addInstruction('R')"
-          >
-            Turn right
-          </b-button>
-          <b-button
-            variant="danger"
-            class="mt-2 mx-2"
-            @click="deleteInstructions"
-          >
-            Delete all
-          </b-button>
+        <div id="instext" class="d-flex flex-column my-2">
+          <h2 class="text-center">Instructions Sequence</h2>
+          <b-form-input
+            class="mx-auto col-6"
+            id="instructionsText"
+            v-model="instructionsText"
+            disabled
+          ></b-form-input>
+        </div>
 
+        <div class="d-flex flex-column my-2">
+          <b-button-toolbar
+            class="d-flex justify-content-around flex-wrap mt-3 mx-auto"
+          >
+            <b-button
+              variant="info"
+              class="mt-2 mx-2"
+              @click="addInstruction('L')"
+            >
+              Turn left
+            </b-button>
+            <b-button
+              variant="info"
+              class="mt-2 mx-2"
+              @click="addInstruction('A')"
+            >
+              Advance
+            </b-button>
+            <b-button
+              variant="info"
+              class="mt-2 mx-2"
+              @click="addInstruction('R')"
+            >
+              Turn right
+            </b-button>
+            <b-button
+              variant="danger"
+              class="mt-2 mx-2"
+              @click="deleteInstructions"
+            >
+              Delete all
+            </b-button>
+          </b-button-toolbar>
           <div class="d-flex justify-content-center my-2">
             <b-button variant="success" class="mb-3" @click="runInstructions">
               Run test
@@ -116,22 +120,22 @@
           </div>
         </div>
       </div>
-    </div>
-    <div v-else>
-      <div v-if="routevalid">
-        <div>Route {{ this.instructionsText }} Valid.</div>
-        <div>Grid Square size: {{ gridSize }}</div>
-        <div>Start position: {{ initVals }}</div>
-        <div>End position {{ currentVals }}</div>
-      </div>
-      <div v-if="routeinvalid">
-        Route {{ this.instructionsText }} Invalid at instruction number
-        {{ this.instructionPointer }}
-      </div>
-      <div class="d-flex justify-content-center my-2">
-        <b-button variant="warning" class="mb-3" @click="restart">
-          Restart?
-        </b-button>
+      <div v-else>
+        <div v-if="routevalid">
+          <div>Route {{ this.instructionsText }} Valid.</div>
+          <div>Grid Square size: {{ gridSize }}</div>
+          <div>Start position: {{ initVals }}</div>
+          <div>End position {{ currentVals }}</div>
+        </div>
+        <div v-if="routeinvalid">
+          Route {{ this.instructionsText }} Invalid at instruction number
+          {{ this.instructionPointer }}
+        </div>
+        <div class="d-flex justify-content-center my-2">
+          <b-button variant="warning" class="mb-3" @click="restart">
+            Restart?
+          </b-button>
+        </div>
       </div>
     </div>
   </div>
