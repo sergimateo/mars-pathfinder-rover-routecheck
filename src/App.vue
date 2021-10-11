@@ -124,8 +124,11 @@
         <div v-if="routevalid">
           <div>Route {{ this.instructionsText }} Valid.</div>
           <div>Grid Square size: {{ gridSize }}</div>
-          <div>Start position: {{ initVals }}</div>
-          <div>End position {{ currentVals }}</div>
+
+          <div>
+            End position: X Value = {{ currentVals.xVal }} | Y Value =
+            {{ currentVals.yVal }} | Orientation: {{ currentVals.orientation }}
+          </div>
         </div>
         <div v-if="routeinvalid">
           Route {{ this.instructionsText }} Invalid at instruction number
@@ -146,19 +149,11 @@ export default {
   name: "App",
   data() {
     return {
-      // text: "",
       compass: ["N", "E", "S", "W"],
       gridSize: 0,
-
-      initVals: {
-        xVal: 0,
-        yVal: 0,
-        orientation: "N",
-      },
+      initVals: {},
       currentVals: {},
-
       instructionsText: "",
-
       instructionsArray: [],
       instructionPointer: 0,
       routeinvalid: 0,
@@ -166,17 +161,17 @@ export default {
       showTest: true,
     };
   },
-  components: {},
-
   methods: {
     restart() {
+      this.gridSize = 0;
+      this.initVals = {};
+      this.currentVals = {};
       this.instructionsText = "";
       this.instructionsArray = [];
       this.instructionPointer = 0;
       this.routeinvalid = 0;
       this.routevalid = 0;
-      this.showTest = !this.showTest;
-      this.currentVals = {};
+      this.showTest = true;
     },
     addInstruction(instruction) {
       this.instructionsText += instruction;
@@ -187,72 +182,41 @@ export default {
       this.instructionsArray = [];
     },
     runInstructions() {
-      // window.alert(
-      //   "Grid Size: " +
-      //     this.gridSize +
-      //     ". Initial Values: " +
-      //     this.initVals.xVal +
-      //     " " +
-      //     this.initVals.yVal +
-      //     " " +
-      //     this.initVals.orientation +
-      //     ". Run Instruction Set: " +
-      //     this.instructionsText +
-      //     this.instructionsArray
-      // );
       this.showTest = !this.showTest;
-      // this.instructionPointer = 0;
-      // this.routeinvalid = 0;
-      // this.routevalid = 0;
-
+      this.bufferedVals = this.initVals;
       this.currentVals = this.initVals;
-      // this.tempVals = this.initVals;
-      // this.currentVals = this.tempVals;
       this.routeValidation();
     },
     routeValidation() {
       if (this.isInsideGrid()) {
         let maxCount = this.instructionsArray.length;
         let i = this.instructionPointer;
-
-        // console.log(maxCount);
-
         if (i < maxCount) {
           this.updateCurrentVals(i);
           this.instructionPointer++;
           console.log("number of instructions" + this.instructionPointer);
           this.routeValidation();
         } else {
-          //  after running last instruction
-          //  check isInsidegrid
           if (this.isInsideGrid()) {
             this.routeinvalid = 0;
             this.routevalid = 1;
-            // this.clearInits();
           } else {
             this.routevalid = 0;
             this.routeinvalid = 1;
           }
-          //           if true
-          //
-          // else
-          //           this.routevalid = 0;
-          //           this.routeinvalid = 1;
         }
       } else {
         this.routevalid = 0;
         this.routeinvalid = 1;
       }
-
-      // window.alert("Route Validating");
     },
 
     isInsideGrid() {
-      let insideX = this.gridSize - this.initVals.xVal;
-      let insideY = this.gridSize - this.initVals.yVal;
+      let insideX = this.gridSize - this.currentVals.xVal;
+      let insideY = this.gridSize - this.currentVals.yVal;
       if (
-        this.initVals.xVal > -1 &&
-        this.initVals.yVal > -1 &&
+        this.currentVals.xVal > -1 &&
+        this.currentVals.yVal > -1 &&
         insideX > -1 &&
         insideY > -1
       ) {
@@ -263,15 +227,13 @@ export default {
     },
     updateCurrentVals(i) {
       let currentInstruction = this.instructionsArray[i];
-      // let newOrientation = "";
+
       let orientationCompassIndex = this.compass.indexOf(
         this.currentVals.orientation
       );
       switch (currentInstruction) {
         case "L":
-          console.log("CASE L:" + currentInstruction);
-          console.log(this.currentVals.orientation);
-
+          //redo code with mod4 division
           if (this.currentVals.orientation == "N") {
             this.currentVals.orientation = "W";
           } else {
@@ -284,9 +246,7 @@ export default {
 
           break;
         case "R":
-          console.log("CASE R:" + currentInstruction);
-          // console.log("CASE L:" + currentInstruction);
-          console.log(this.currentVals.orientation);
+          //redo code with mod4 division
 
           if (this.currentVals.orientation == "W") {
             this.currentVals.orientation = "N";
@@ -299,8 +259,6 @@ export default {
           console.log(this.currentVals.orientation); //  do sthing
           break;
         case "A":
-          console.log("CASE A:" + currentInstruction);
-
           switch (this.currentVals.orientation) {
             case "N":
               this.currentVals.yVal += 1;
@@ -315,21 +273,9 @@ export default {
               this.currentVals.xVal -= 1;
               break;
           }
-          //  do sthing
           break;
       }
     },
-    // clearInits() {
-    //   this.initVals = {
-    //     xVal: 0,
-    //     yVal: 0,
-    //     orientation: "N",
-    //   };
-    //   // instructionsText: "",
-    //   this.instructionsArray = [];
-    //   this.instructionPointer = 0;
-    //   this.gridSize = 0;
-    // },
   },
 };
 </script>
@@ -337,7 +283,7 @@ export default {
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Oxanium&display=swap");
 #app {
-  font-family: Oxanium, Computer, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Oxanium, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
