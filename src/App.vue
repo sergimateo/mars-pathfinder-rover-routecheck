@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="bg">
-      <img src="./assets/1341_pathfinder20160226-16.png" alt="" />
+      <img src="./assets/1341_pathfinder20160226-16.jpg" alt="" />
     </div>
     <img
       alt="Pathfinder logo"
@@ -11,101 +11,121 @@
     <div class="my-2">
       <h1>Sojourner Route Validation Test</h1>
     </div>
-
-    <div class="d-flex flex-column my-2">
-      <h2 class="text-center">Set Squared Grid Size</h2>
-      <div class="d-flex col-2 mx-auto my-2">
-        <b-form-input
-          type="number"
-          id="gridSize"
-          min="0"
-          step="1"
-          class="form-control"
-          v-model.number="gridSize"
-        >
-        </b-form-input>
-      </div>
-    </div>
-    <div class="d-flex flex-column my-2">
-      <h2 class="text-center">Initial Values</h2>
-      <div class="d-flex justify-content-center">
-        <div class="form-group param mx-1">
-          <label for="xVal">X Value</label>
+    <div v-if="showTest">
+      <div class="d-flex flex-column my-2">
+        <h2 class="text-center">Set Squared Grid Size</h2>
+        <div class="d-flex col-2 mx-auto my-2">
           <b-form-input
             type="number"
-            id="xVal"
+            id="gridSize"
             min="0"
             step="1"
             class="form-control"
-            v-model.number="initVals.xVal"
+            v-model.number="gridSize"
           >
           </b-form-input>
         </div>
-        <div class="mx-1">:</div>
-        <div class="form-group param mx-1">
-          <label for="yVal">Y Value</label>
-          <input
-            id="yVal"
-            type="number"
-            min="0"
-            step="1"
-            class="form-control"
-            v-model.number="initVals.yVal"
-          />
-        </div>
-        <div class="form-group mx-3">
-          <label for="orientation">Orientation</label>
-          <select
-            name="orientation"
-            id="orientation"
-            class="form-control"
-            v-model="initVals.orientation"
-          >
-            <option value="N">N</option>
-            <option value="E">E</option>
-            <option value="S">S</option>
-            <option value="W">W</option>
-          </select>
+      </div>
+      <div class="d-flex flex-column my-2">
+        <h2 class="text-center">Initial Values</h2>
+        <div class="d-flex justify-content-center">
+          <div class="form-group param mx-1">
+            <label for="xVal">X Value</label>
+            <b-form-input
+              type="number"
+              id="xVal"
+              min="0"
+              step="1"
+              class="form-control"
+              v-model.number="initVals.xVal"
+            >
+            </b-form-input>
+          </div>
+          <div class="mx-1">:</div>
+          <div class="form-group param mx-1">
+            <label for="yVal">Y Value</label>
+            <b-form-input
+              id="yVal"
+              type="number"
+              min="0"
+              step="1"
+              class="form-control"
+              v-model.number="initVals.yVal"
+            ></b-form-input>
+          </div>
+          <div class="form-group mx-3">
+            <label for="orientation">Orientation</label>
+            <select
+              name="orientation"
+              id="orientation"
+              class="form-control"
+              v-model="initVals.orientation"
+            >
+              <option value="N">N</option>
+              <option value="E">E</option>
+              <option value="S">S</option>
+              <option value="W">W</option>
+            </select>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="d-flex flex-column my-2">
-      <h2 class="text-center">Instructions Sequence</h2>
-      <b-form-input
-        class="mx-auto col-6"
-        id="instructionsText"
-        v-model="instructionsText"
-        disabled
-      ></b-form-input>
+      <div class="d-flex flex-column my-2">
+        <h2 class="text-center">Instructions Sequence</h2>
+        <b-form-input
+          class="mx-auto col-6"
+          id="instructionsText"
+          v-model="instructionsText"
+          disabled
+        ></b-form-input>
 
-      <div class="d-flex justify-content-around flex-wrap mt-3 mx-auto">
-        <b-button variant="info" class="mt-2 mx-2" @click="addInstruction('L')">
-          Turn left
-        </b-button>
-        <b-button variant="info" class="mt-2 mx-2" @click="addInstruction('A')">
-          Advance
-        </b-button>
-        <b-button variant="info" class="mt-2 mx-2" @click="addInstruction('R')">
-          Turn right
-        </b-button>
-        <b-button
-          variant="danger"
-          class="mt-2 mx-2"
-          @click="deleteInstructions"
-        >
-          Delete all
+        <div class="d-flex justify-content-around flex-wrap mt-3 mx-auto">
+          <b-button
+            variant="info"
+            class="mt-2 mx-2"
+            @click="addInstruction('L')"
+          >
+            Turn left
+          </b-button>
+          <b-button
+            variant="info"
+            class="mt-2 mx-2"
+            @click="addInstruction('A')"
+          >
+            Advance
+          </b-button>
+          <b-button
+            variant="info"
+            class="mt-2 mx-2"
+            @click="addInstruction('R')"
+          >
+            Turn right
+          </b-button>
+          <b-button
+            variant="danger"
+            class="mt-2 mx-2"
+            @click="deleteInstructions"
+          >
+            Delete all
+          </b-button>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center my-2">
+        <b-button variant="success" class="mb-3" @click="runInstructions">
+          Run test
         </b-button>
       </div>
     </div>
-    <div class="d-flex justify-content-center my-2">
-      <b-button variant="success" class="mb-3" @click="runInstructions">
-        Run test
-      </b-button>
-    </div>
-    <div>
-      <div v-if="routevalid">Route Valid. End position {{ currentVals }}</div>
+    <div v-else>
+      <div v-if="routevalid">
+        Route {{ this.instructionsText }} Valid. End position {{ currentVals }}
+      </div>
       <div v-if="routeinvalid">
         Route Invalid at instruction {{ this.instructionPointer }}
+      </div>
+      <div class="d-flex justify-content-center my-2">
+        <b-button variant="warning" class="mb-3" @click="restart">
+          Restart?
+        </b-button>
       </div>
     </div>
   </div>
@@ -116,7 +136,7 @@ export default {
   name: "App",
   data() {
     return {
-      text: "",
+      // text: "",
       compass: ["N", "E", "S", "W"],
       gridSize: 0,
 
@@ -128,14 +148,25 @@ export default {
       currentVals: {},
 
       instructionsText: "",
+
       instructionsArray: [],
       instructionPointer: 0,
       routeinvalid: 0,
       routevalid: 0,
+      showTest: true,
     };
   },
   components: {},
+
   methods: {
+    restart() {
+      this.instructionsText = "";
+      this.instructionsArray = [];
+      this.instructionPointer = 0;
+      this.routeinvalid = 0;
+      this.routevalid = 0;
+      this.showTest = !this.showTest;
+    },
     addInstruction(instruction) {
       this.instructionsText += instruction;
       this.instructionsArray.push(instruction);
@@ -158,18 +189,21 @@ export default {
       //     this.instructionsText +
       //     this.instructionsArray
       // );
-      this.instructionPointer = 0;
-      this.routeinvalid = 0;
-      this.routevalid = 0;
-      // this.currentVals = this.initVals;
-      this.tempVals = this.initVals;
-      this.currentVals = this.tempVals;
+      this.showTest = !this.showTest;
+      // this.instructionPointer = 0;
+      // this.routeinvalid = 0;
+      // this.routevalid = 0;
+
+      this.currentVals = this.initVals;
+      // this.tempVals = this.initVals;
+      // this.currentVals = this.tempVals;
       this.routeValidation();
     },
     routeValidation() {
       if (this.isInsideGrid()) {
         let maxCount = this.instructionsArray.length;
         let i = this.instructionPointer;
+
         // console.log(maxCount);
 
         if (i < maxCount) {
@@ -183,6 +217,7 @@ export default {
           if (this.isInsideGrid()) {
             this.routeinvalid = 0;
             this.routevalid = 1;
+            this.clearInits();
           } else {
             this.routevalid = 0;
             this.routeinvalid = 1;
@@ -273,17 +308,29 @@ export default {
           break;
       }
     },
+    clearInits() {
+      this.initVals = {
+        xVal: 0,
+        yVal: 0,
+        orientation: "N",
+      };
+      // instructionsText: "",
+      this.instructionsArray = [];
+      this.instructionPointer = 0;
+      this.gridSize = 0;
+    },
   },
 };
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Oxanium&display=swap");
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Oxanium, Computer, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: whitesmoke;
+  color: rgb(255, 231, 13);
   margin-top: 10px;
 }
 #bg {
