@@ -161,7 +161,9 @@ export default {
       this.instructionPointer = 0;
       this.routeinvalid = 0;
       this.routevalid = 0;
-      this.currentVals = this.initVals;
+      // this.currentVals = this.initVals;
+      this.tempVals = this.initVals;
+      this.currentVals = this.tempVals;
       this.routeValidation();
     },
     routeValidation() {
@@ -202,15 +204,75 @@ export default {
     isInsideGrid() {
       let insideX = this.gridSize - this.initVals.xVal;
       let insideY = this.gridSize - this.initVals.yVal;
-      if (this.initVals.xVal > -1 && insideX > -1 && insideY > -1) {
+      if (
+        this.initVals.xVal > -1 &&
+        this.initVals.yVal > -1 &&
+        insideX > -1 &&
+        insideY > -1
+      ) {
         return 1;
       } else {
         return 0;
       }
     },
-    // updateCurrentVals(i) {
-    // let currentInstruction = this.instructionsArray[i];
-    // },
+    updateCurrentVals(i) {
+      let currentInstruction = this.instructionsArray[i];
+      // let newOrientation = "";
+      let orientationCompassIndex = this.compass.indexOf(
+        this.currentVals.orientation
+      );
+      switch (currentInstruction) {
+        case "L":
+          console.log("CASE L:" + currentInstruction);
+          console.log(this.currentVals.orientation);
+
+          if (this.currentVals.orientation == "N") {
+            this.currentVals.orientation = "W";
+          } else {
+            this.currentVals.orientation = this.compass[
+              orientationCompassIndex - 1
+            ];
+          }
+
+          console.log(this.currentVals.orientation);
+
+          break;
+        case "R":
+          console.log("CASE R:" + currentInstruction);
+          // console.log("CASE L:" + currentInstruction);
+          console.log(this.currentVals.orientation);
+
+          if (this.currentVals.orientation == "W") {
+            this.currentVals.orientation = "N";
+          } else {
+            this.currentVals.orientation = this.compass[
+              orientationCompassIndex + 1
+            ];
+          }
+
+          console.log(this.currentVals.orientation); //  do sthing
+          break;
+        case "A":
+          console.log("CASE A:" + currentInstruction);
+
+          switch (this.currentVals.orientation) {
+            case "N":
+              this.currentVals.yVal += 1;
+              break;
+            case "E":
+              this.currentVals.xVal += 1;
+              break;
+            case "S":
+              this.currentVals.yVal -= 1;
+              break;
+            case "W":
+              this.currentVals.xVal -= 1;
+              break;
+          }
+          //  do sthing
+          break;
+      }
+    },
   },
 };
 </script>
