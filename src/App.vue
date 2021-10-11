@@ -8,7 +8,7 @@
       src="./assets/Mars_Pathfinder_Insignia_large.png"
       height="100px"
     />
-    <div class="my-2">
+    <div class="my-3">
       <h1>Sojourner Route Validation Test</h1>
     </div>
     <div v-if="showTest">
@@ -41,7 +41,7 @@
             >
             </b-form-input>
           </div>
-          <div class="mx-1">:</div>
+
           <div class="form-group param mx-1">
             <label for="yVal">Y Value</label>
             <b-form-input
@@ -77,7 +77,8 @@
           v-model="instructionsText"
           disabled
         ></b-form-input>
-
+      </div>
+      <div>
         <div class="d-flex justify-content-around flex-wrap mt-3 mx-auto">
           <b-button
             variant="info"
@@ -107,20 +108,25 @@
           >
             Delete all
           </b-button>
+
+          <div class="d-flex justify-content-center my-2">
+            <b-button variant="success" class="mb-3" @click="runInstructions">
+              Run test
+            </b-button>
+          </div>
         </div>
-      </div>
-      <div class="d-flex justify-content-center my-2">
-        <b-button variant="success" class="mb-3" @click="runInstructions">
-          Run test
-        </b-button>
       </div>
     </div>
     <div v-else>
       <div v-if="routevalid">
-        Route {{ this.instructionsText }} Valid. End position {{ currentVals }}
+        <div>Route {{ this.instructionsText }} Valid.</div>
+        <div>Grid Square size: {{ gridSize }}</div>
+        <div>Start position: {{ initVals }}</div>
+        <div>End position {{ currentVals }}</div>
       </div>
       <div v-if="routeinvalid">
-        Route Invalid at instruction {{ this.instructionPointer }}
+        Route {{ this.instructionsText }} Invalid at instruction number
+        {{ this.instructionPointer }}
       </div>
       <div class="d-flex justify-content-center my-2">
         <b-button variant="warning" class="mb-3" @click="restart">
@@ -166,6 +172,7 @@ export default {
       this.routeinvalid = 0;
       this.routevalid = 0;
       this.showTest = !this.showTest;
+      this.currentVals = {};
     },
     addInstruction(instruction) {
       this.instructionsText += instruction;
@@ -217,7 +224,7 @@ export default {
           if (this.isInsideGrid()) {
             this.routeinvalid = 0;
             this.routevalid = 1;
-            this.clearInits();
+            // this.clearInits();
           } else {
             this.routevalid = 0;
             this.routeinvalid = 1;
@@ -308,17 +315,17 @@ export default {
           break;
       }
     },
-    clearInits() {
-      this.initVals = {
-        xVal: 0,
-        yVal: 0,
-        orientation: "N",
-      };
-      // instructionsText: "",
-      this.instructionsArray = [];
-      this.instructionPointer = 0;
-      this.gridSize = 0;
-    },
+    // clearInits() {
+    //   this.initVals = {
+    //     xVal: 0,
+    //     yVal: 0,
+    //     orientation: "N",
+    //   };
+    //   // instructionsText: "",
+    //   this.instructionsArray = [];
+    //   this.instructionPointer = 0;
+    //   this.gridSize = 0;
+    // },
   },
 };
 </script>
