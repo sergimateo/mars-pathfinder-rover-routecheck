@@ -138,7 +138,7 @@
           <div>Route {{ this.instructionsText }} Invalid...</div>
           <div>
             Sojourner left the grid map after executing instruction
-            {{ this.instructionPointer - 1 }}
+            {{ this.instructionPointer }}
           </div>
         </div>
         <div class="d-flex justify-content-center my-2">
