@@ -1,6 +1,6 @@
 {
   "name": "mars-pathfinder-rover-routecheck",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "private": true,
   "environment": "14.17.3",
   "scripts": {
