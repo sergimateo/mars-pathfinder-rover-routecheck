@@ -135,8 +135,11 @@
           </div>
         </div>
         <div v-if="routeinvalid">
-          Route {{ this.instructionsText }} Invalid at instruction number
-          {{ this.instructionPointer }}
+          <div>Route {{ this.instructionsText }} Invalid...</div>
+          <div>
+            Sojourner left the grid map after executing instruction
+            {{ this.instructionPointer - 1 }}
+          </div>
         </div>
         <div class="d-flex justify-content-center my-2">
           <b-button variant="warning" class="mb-3" @click="restart">
@@ -290,15 +293,13 @@ export default {
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Oxanium&display=swap");
-:root {
-  --main-text-color: rgb(255, 231, 13);
-}
+
 #app {
   font-family: Oxanium, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: var(main-text-color);
+  color: rgb(255, 231, 13);
   margin-top: 10px;
 }
 #bg {
@@ -320,6 +321,6 @@ export default {
   min-height: 50%;
 }
 .instruction-btn {
-  color: var(main-text-color);
+  color: rgb(255, 231, 13);
 }
 </style>
