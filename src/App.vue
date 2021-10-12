@@ -18,7 +18,7 @@
         </div>
         <div id="gridsize" class="d-flex flex-column my-2">
           <h4 class="text-center">Set Squared Grid Size</h4>
-          <div class="d-flex col-2 mx-auto my-2">
+          <div class="d-flex col-1 mx-auto my-2">
             <b-form-input
               type="number"
               id="gridSize"
@@ -31,7 +31,7 @@
           </div>
         </div>
         <div id="xposypos" class="d-flex justify-content-center">
-          <div class="form-group param mx-1">
+          <div class="form-group col-1 param mx-1">
             <label for="xVal">X Value</label>
             <b-form-input
               type="number"
@@ -44,7 +44,7 @@
             </b-form-input>
           </div>
 
-          <div class="form-group param mx-1">
+          <div class="form-group col-1 param mx-1">
             <label for="yVal">Y Value</label>
             <b-form-input
               id="yVal"
@@ -86,35 +86,39 @@
           >
             <b-button
               variant="info"
-              class="mt-2 mx-2"
+              class="mt-2 mx-2 instruction-btn"
               @click="addInstruction('L')"
             >
               Turn left
             </b-button>
             <b-button
               variant="info"
-              class="mt-2 mx-2"
+              class="mt-2 mx-2 instruction-btn"
               @click="addInstruction('A')"
             >
               Advance
             </b-button>
             <b-button
               variant="info"
-              class="mt-2 mx-2"
+              class="mt-2 mx-2 instruction-btn"
               @click="addInstruction('R')"
             >
               Turn right
             </b-button>
             <b-button
               variant="danger"
-              class="mt-2 mx-2"
+              class="mt-2 mx-2 instruction-btn"
               @click="deleteInstructions"
             >
               Delete all
             </b-button>
           </b-button-toolbar>
           <div class="d-flex justify-content-center my-2">
-            <b-button variant="success" class="mb-3" @click="runInstructions">
+            <b-button
+              variant="success"
+              class="mb-3 instruction-btn"
+              @click="runInstructions"
+            >
               Run test
             </b-button>
           </div>
@@ -151,7 +155,11 @@ export default {
     return {
       compass: ["N", "E", "S", "W"],
       gridSize: 0,
-      initVals: {},
+      initVals: {
+        xVal: 0,
+        yVal: 0,
+        orientation: "N",
+      },
       currentVals: {},
       instructionsText: "",
       instructionsArray: [],
@@ -164,7 +172,7 @@ export default {
   methods: {
     restart() {
       this.gridSize = 0;
-      this.initVals = {};
+      this.initVals = { xVal: 0, yVal: 0, orientation: "N" };
       this.currentVals = {};
       this.instructionsText = "";
       this.instructionsArray = [];
@@ -282,12 +290,15 @@ export default {
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Oxanium&display=swap");
+:root {
+  --main-text-color: rgb(255, 231, 13);
+}
 #app {
   font-family: Oxanium, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: rgb(255, 231, 13);
+  color: var(main-text-color);
   margin-top: 10px;
 }
 #bg {
@@ -307,5 +318,8 @@ export default {
   margin: auto;
   min-width: 50%;
   min-height: 50%;
+}
+.instruction-btn {
+  color: var(main-text-color);
 }
 </style>
